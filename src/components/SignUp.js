@@ -1,60 +1,127 @@
 import React from "react";
- import { useRef, useState } from "react";
+ import { useRef, useState ,useContext} from "react";
  import classes from "./SignUp.module.css";
+ import AuthContext from "./store/auth-context";
+ import { useHistory } from 'react-router-dom';
 
- function Signup() {
+
+ const Signup = () => {
+ 
+  const history = useHistory();
    const emailInputRef = useRef();
    const passwordInputRef = useRef();
-   const confirmpasswordInputRef = useRef();
-   const [isLogin, setIsLogin] = useState(false);
+ 
+
+   const [isLogin, setIsLogin] = useState(true);
    const [isLoading, setIsLoading] = useState(false);
+    
+   const authCtx = useContext(AuthContext);
 
    const switchAuthModeHandler = () => {
      setIsLogin((prevState) => !prevState);
    };
+   
 
    const submitHandler = (event) => {
      event.preventDefault();
 
      const enteredEmail = emailInputRef.current.value;
      const enteredPassword = passwordInputRef.current.value;
-     const enteredConfirmPassword = confirmpasswordInputRef.current.value;
+    
 
      setIsLoading(true);
-     let url;
+    let url;
+  
+    if(isLogin){
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAjnoOONhbal4-8ybz17138o-5U25hPyxM'
+     
+      fetch(url,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            email: enteredEmail,
+            password: enteredPassword,
+            returnSecureToken	:true
+          }),
+          headers: {
+             'Content-Type' : 'application/json'
+          }
+        }
+    ).then(res => {
+      setIsLoading(false);
+      if(res.ok){
+          return res.json();
+      }else{
+       return res.json().then(data => {
+          let errorMessage = 'Authentication failed';
+          if(data && data.error && data.error.message){
+            errorMessage = data.error.message;
+          }
+          
+          throw new Error(errorMessage);
+        });   
+      }
+    }).then(data => {
+          authCtx.login(data.idToken);
+          history.replace('/Header');
+         window.location.reload();
+     
+    })
+    .catch((err) => {
+        alert(err.message)
+    });
+    }
+    else{
+      url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAjnoOONhbal4-8ybz17138o-5U25hPyxM'
 
-     if (isLogin) {
-       url =
-         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCGFwS9sVAtyTS7hLCpP0SXbyDrC_YLKcg";
-     } else {
-       url =
-         "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCGFwS9sVAtyTS7hLCpP0SXbyDrC_YLKcg";
-     }
-
-     fetch(url, {
-       method: "POST",
-       body: JSON.stringify({
-         email: enteredEmail,
-         pasword: enteredPassword,
-         confirmpassword: enteredConfirmPassword,
-       }),
-       headers: {
-         "Content-type": "appliction/json",
-       },
-     }).then((res) => {
-       if (res.ok) {
-         return res.json();
-       } else {
-         throw new Error("Something Went Wrong");
-       }
-     });
-     alert("Succefull Login");
+      fetch(url,
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            email: enteredEmail,
+            password: enteredPassword,
+            returnSecureToken	:true
+          }),
+          headers: {
+             'Content-Type' : 'application/json'
+          }
+        }
+    ).then(res => {
+      setIsLoading(false);
+      if(res.ok){
+          return res.json();
+      }else{
+       return res.json().then(data => {
+          let errorMessage = 'Authentication failed';
+          if(data && data.error && data.error.message){
+            errorMessage = data.error.message;
+          }
+          
+          throw new Error(errorMessage);
+        });   
+      }
+    }).then(data => {
+          authCtx.login(data.idToken);
+          history.replace('/signup');
+         window.location.reload();
+     
+    })
+    .catch((err) => {
+        alert(err.message)
+    });
+      
+    }
+ 
+     
    };
+
+   
 
    return (
     <section className={classes.auth}>
      
     <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
+   
     <form onSubmit={submitHandler}>
       <div className={classes.control}>
         <label htmlFor='email'>Email</label>
@@ -69,15 +136,8 @@ import React from "react";
           ref={passwordInputRef}
         />
       </div>
-      <div className={classes.control}>
-        <label htmlFor='password'>Confirm Password</label>
-        <input
-          type='password'
-          id='password'
-          required
-          ref={passwordInputRef}
-        />
-      </div>
+    
+  
       <div className={classes.actions}>
        {!isLoading && <button>{isLogin ? 'Login' : 'Sign Up'}</button> }
        {isLoading && <p>Sending request...</p>}
