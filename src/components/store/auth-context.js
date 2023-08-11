@@ -5,13 +5,13 @@ const AuthContext = React.createContext({
    isLoggedIn:false,
    login: (token) => {} ,
    logout : () => {},
-   email: '',
+  
 });
 
 export const AuthContextProvider = (props) => {
   const IntitialToken = localStorage.getItem('token'); 
     const [token,setToken] = useState(IntitialToken);
-    const [email,setEmail] = useState('');
+   
     console.log('auth',token);
 
     const userIsLoggedIn = !!token; 
@@ -19,14 +19,13 @@ export const AuthContextProvider = (props) => {
     const loginHandler = (token) => {
         setToken(token);
         localStorage.setItem('token', token);
-        setEmail(email);
-        localStorage.setItem('email', email);
+      
     };
 
     const logoutHandler = () => {
         setToken(null); 
         localStorage.removeItem('token');
-        localStorage.removeItem('email');
+       
     };
 
     const contextValue = {
@@ -34,7 +33,7 @@ export const AuthContextProvider = (props) => {
         isLoggedIn :userIsLoggedIn,
         login :loginHandler,
         logout :logoutHandler,
-        email: email,
+      
     };
     
     return (
