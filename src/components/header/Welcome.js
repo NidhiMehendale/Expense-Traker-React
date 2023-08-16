@@ -1,14 +1,23 @@
-import React, { useContext } from "react";
+import React, { } from "react";
 import classes from "./Welcome.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink ,useHistory} from "react-router-dom";
 import { Fragment } from "react";
-import AuthContext from "../store/auth-context";
+
 
 function Welcome() {
+  const history = useHistory();
+
   const storedName = localStorage.getItem("enteredName");
   const storedImageUrl = localStorage.getItem("imageUrl");
   const isProfileIncomplete = storedName || storedImageUrl;
   console.log(isProfileIncomplete)
+
+  const logoutHandler = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('enteredName');
+    localStorage.removeItem('imageUrl');
+    history.replace('/signup');
+  };
 
   return (
     <Fragment>
@@ -20,7 +29,8 @@ function Welcome() {
               <NavLink to="/welcome/profile">Complete now</NavLink>
             </div>
         </div> }
-        <div>Welcome, {storedName}</div>
+       {isProfileIncomplete && <div>Welcome, {storedName}</div>}
+       <button className={classes.logout} onClick={logoutHandler}>Logout</button>
       </div>
     </Fragment>
   );

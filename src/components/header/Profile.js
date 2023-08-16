@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import classes from './Profile.module.css';
 import AuthContext from "../store/auth-context";
-import { useContext ,useEffect} from "react";
+import { useContext } from "react";
 import { useHistory } from 'react-router-dom';
 
 function Profile() {
@@ -10,8 +10,6 @@ function Profile() {
   const imageInputRef = useRef();
   const ctx = useContext(AuthContext);
   console.log('ctx.idtoken',ctx.idtoken);
- // "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyAjnoOONhbal4-8ybz17138o-5U25hPyxM",
-
 
 
   const submitHandler = async (event) => {
