@@ -3,6 +3,7 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Import correct components
 import Welcome from "./components/header/Welcome";
 import Profile from "./components/header/Profile";
+import Resetpassword from "./components/header/Resetpassword";
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           </Route>
           <Route path="/welcome/profile">
             <Profile />
+          </Route>
+          <Route path="/resetpassword">
+            <Resetpassword />
           </Route>
         </Switch>
       </Router>
