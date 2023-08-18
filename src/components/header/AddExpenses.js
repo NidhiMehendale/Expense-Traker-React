@@ -1,4 +1,4 @@
-import React, { Fragment, useRef } from "react";
+import React, { Fragment, useRef, useEffect } from "react";
 import classes from "./AddExpenses.module.css";
 // import { useHistory } from "react-router-dom";
 
@@ -9,6 +9,48 @@ const AddExpenses = (props) => {
   const inputPricRef = useRef();
   const inputDesRef = useRef();
   const inputCatRef = useRef();
+
+  useEffect(() => {
+    const fetchExpensedData = async () => {
+      if (props.editingId) {
+        const response = await fetch(
+          `https://expensetracker-react-ff227-default-rtdb.firebaseio.com/expense/${props.editingId.id}.json`
+        );
+
+        const data = await response.json();
+        inputPricRef.current.value = data.money;
+        inputDesRef.current.value = data.description;
+        inputCatRef.current.value = data.category;
+      }
+    };
+   
+    fetchExpensedData();
+  }, [props.editingId]);
+
+  const deleteHandler = async (id) => {
+    const response = await fetch(
+      `https://expensetracker-react-ff227-default-rtdb.firebaseio.com/expense/${id}.json`,
+      {
+        method: "DELETE",
+      }
+    )
+    const data = await response.json();
+    props.onDelete(id);
+    console.log(data);
+    console.log('delete in addexpense');
+  };
+
+  const editHandler = async (item) => {
+    const response = await fetch(
+      `https://expensetracker-react-ff227-default-rtdb.firebaseio.com/expense/${item.id}.json`
+     
+    );
+    const data = await response.json();
+    props.onEdit(item);
+    console.log(data);
+    deleteHandler(item.id);
+    console.log('edit in addexpense');
+  };
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -39,6 +81,11 @@ const AddExpenses = (props) => {
     );
     const data = await response.json();
     console.log(data);
+    
+    inputPricRef.current.value='';
+    inputDesRef.current.value='';
+    inputCatRef.current.value='';
+        
   };
 
   return (
@@ -72,10 +119,27 @@ const AddExpenses = (props) => {
           <h2>Expenses List</h2>
           <ul>
             {props.items.map((expense, index) => (
-              <li key={index}>
+              <li key={index} style={{marginBottom:'24px'}}>
                 <strong>Money:</strong> {expense.money},
                 <strong> Description:</strong> {expense.description},
-                <strong> Category:</strong> {expense.category}
+                <strong> Category:</strong> {expense.category}  
+                <button
+                  className={classes.delete}
+                  onClick={() => {
+                    deleteHandler(expense.id);
+                  }}
+                >
+                  Delete
+                </button>
+                <button
+                  className={classes.edit}
+                  onClick={() => {
+                    editHandler(expense);
+                  }}
+                >
+                  Edit
+                </button>
+           
               </li>
             ))}
           </ul>

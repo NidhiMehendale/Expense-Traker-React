@@ -13,8 +13,8 @@ function Welcome() {
   const storedImageUrl = localStorage.getItem("imageUrl");
   const isProfileIncomplete = storedName || storedImageUrl;
   const [items, setItems] = useState([]);
+  const [editingId, setEdit] = useState(null);
 
-  console.log(isProfileIncomplete)
 
   const logoutHandler = () => {
     localStorage.removeItem('token');
@@ -33,15 +33,13 @@ function Welcome() {
     );
 
     const data = await response.json();
-
     console.log(data);
-
     const loadedExpenses = [];
 
     for (const key in data) {
       loadedExpenses.push({
         id: key,
-        amount: data[key].amount,
+        money: data[key].money,
         description: data[key].description,
         category: data[key].category,
       });
@@ -52,6 +50,20 @@ function Welcome() {
   useEffect(() => {
     getExpense();
   }, [getExpense]);
+
+  const deleteHandler = (id) => {
+    console.log("deleted", id);
+
+    setItems((prev) => {
+      const updatedExpense = prev.filter((item) => item.id !== id)
+      return updatedExpense;
+    })
+  }
+
+  const editHandler = (id) => {
+    console.log(" recevide edited id", id);
+    setEdit(id)
+  }
 
   return (
     <Fragment>
@@ -66,7 +78,13 @@ function Welcome() {
        {isProfileIncomplete && <div>Welcome, {storedName}</div>}
        <button className={classes.logout} onClick={logoutHandler}>Logout</button>
       </div>
-      <AddExpenses onSaveData={saveExpenseDataHandler}  items={items} />
+      <AddExpenses 
+         onSaveData={saveExpenseDataHandler}  
+         items={items} 
+         editingId={editingId}
+         onDelete={deleteHandler}
+         onEdit={editHandler}
+         />
     
     </Fragment>
   );
