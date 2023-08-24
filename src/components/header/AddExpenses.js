@@ -11,6 +11,11 @@ const AddExpenses = (props) => {
   const inputDesRef = useRef();
   const inputCatRef = useRef();
 
+  const totalExpenses = props.items.reduce(
+    (total, expense) => total + parseFloat(expense.money),
+    0
+  );
+
   useEffect(() => {
     const fetchExpensedData = async () => {
       if (props.editingId) {
@@ -111,10 +116,10 @@ const AddExpenses = (props) => {
             <label htmlFor="category">
               Category
             </label>
-            <input type="text" id="category" ref={inputCatRef}/>
+            <input type="text" id="category" placeholder="Food , Cloths , Movies " ref={inputCatRef}/>
           </div>
         
-          <button type="submit" className={classes.button}>
+          <button type="submit" className={classes['add-button']}>
             Add Expenses
           </button>
         </form>
@@ -122,14 +127,23 @@ const AddExpenses = (props) => {
 
       <div className={classes.expenses}>
     {props.items.length > 0 && (
-        <div className={classes.expensesList}>
-          <h2>Expenses List</h2>
-          <ul>
-            {props.items.map((expense, index) => (
-              <li key={index} style={{marginBottom:'24px'}}>
-                <strong>Money:</strong> {expense.money},
-                <strong> Description:</strong> {expense.description},
-                <strong> Category:</strong> {expense.category}  
+      <div className={classes.expensesList}>
+      <h2>Expenses List</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Money</th>
+            <th>Description</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody>
+          {props.items.map((expense, index) => (
+            <tr key={index}>
+              <td>{expense.money}</td>
+              <td>{expense.description}</td>
+              <td>{expense.category}</td>
+              <td>
                 <button
                   className={classes.delete}
                   onClick={() => {
@@ -146,11 +160,17 @@ const AddExpenses = (props) => {
                 >
                   Edit
                 </button>
-           
-              </li>
-            ))}
-          </ul>
-        </div>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className={classes.total}>Total Amount: {totalExpenses.toFixed(2)}</div>
+      {totalExpenses > 10000 && (
+        <button className={classes.premiumButton}>Activate Premium</button>
+      )}
+    </div>
+    
       )}
     </div>
     </Fragment>

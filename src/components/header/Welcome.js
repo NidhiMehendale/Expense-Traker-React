@@ -4,14 +4,14 @@ import { NavLink ,useHistory} from "react-router-dom";
 import { Fragment } from "react";
 import AddExpenses from "./AddExpenses";
 //import ExpensesList from "./ExpensesList";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authActions } from "../store/Authentication";
 
 
 function Welcome() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const token = useSelector((state) => state.authentication.token);
+  //const token = useSelector((state) => state.authentication.token);
 
   const storedName = localStorage.getItem("enteredName");
   const storedImageUrl = localStorage.getItem("imageUrl");
@@ -73,7 +73,7 @@ function Welcome() {
   return (
     <Fragment>
       <div className={classes.main}>
-        <div>Welcome to the expense tracker!!!!</div>
+        <h2 style={{fontWeight:'bold'}}>Expense Tracker</h2>
         {!isProfileIncomplete && <div className={classes.right}>     
             <div>
               Your profile is incomplete.

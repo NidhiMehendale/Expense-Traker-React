@@ -11,7 +11,8 @@ const expenseSlice = createSlice({
     reducers:{
         recivedData(state,action){
             state.data = action.payload
-        }
+        },
+        
     }
 })
 export const expenseActions = expenseSlice.actions;

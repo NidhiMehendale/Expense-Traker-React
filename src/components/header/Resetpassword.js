@@ -41,7 +41,7 @@ function Resetpassword() {
         <h1>Reset Password</h1>
         <label htmlFor="">Enter the Email Which You Have Registered:</label>
         <input type="text" ref={inputEmailRef} id="email" required />
-        <button type="submit">Send Link</button>
+        <button className={classes['reset-button']} type="submit">Send Link</button>
       </form>
     </div>
   );
