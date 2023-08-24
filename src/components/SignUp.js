@@ -1,11 +1,14 @@
-import { useState, useRef, useContext} from 'react';
+import { useState, useRef} from 'react';
 import { useHistory } from 'react-router-dom';
 import classes from './SignUp.module.css';
-import AuthContext from './store/auth-context';
+//import AuthContext from './store/auth-context';
+import { useDispatch } from "react-redux";
+import { authActions } from "./store/Authentication";
 
 
 const LoginPage = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
@@ -14,7 +17,7 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
-  const authCtx = useContext(AuthContext);
+  //const authCtx = useContext(AuthContext);
 
 
 
@@ -74,7 +77,9 @@ const LoginPage = () => {
           });   
         }
       }).then(data => {
-            authCtx.login(data.idToken);
+           // authCtx.login(data.idToken);
+           console.log("getdata", data);
+           dispatch(authActions.login({ token: data.idToken, email: data.email }));
             history.replace(replace);
            window.location.reload();
        

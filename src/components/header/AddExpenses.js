@@ -1,11 +1,12 @@
-import React, { Fragment, useRef, useEffect } from "react";
+import React, { Fragment, useRef,useEffect } from "react";
 import classes from "./AddExpenses.module.css";
 // import { useHistory } from "react-router-dom";
-
+import { useDispatch } from "react-redux";
+import { expenseActions } from "../store/Expense";
 
 const AddExpenses = (props) => {
   // const history = history();
-
+  const dispatch = useDispatch();
   const inputPricRef = useRef();
   const inputDesRef = useRef();
   const inputCatRef = useRef();
@@ -18,14 +19,20 @@ const AddExpenses = (props) => {
         );
 
         const data = await response.json();
-        inputPricRef.current.value = data.money;
-        inputDesRef.current.value = data.description;
-        inputCatRef.current.value = data.category;
+      
+        dispatch(expenseActions.recivedData(data));
+        if(data){
+            console.log('useEffect data',data)
+            inputPricRef.current.value = data.money;
+            inputDesRef.current.value = data.description;
+           inputCatRef.current.value = data.category;
+        }
+    
       }
     };
    
     fetchExpensedData();
-  }, [props.editingId]);
+  }, [props.editingId,dispatch]);
 
   const deleteHandler = async (id) => {
     const response = await fetch(
@@ -43,7 +50,7 @@ const AddExpenses = (props) => {
   const editHandler = async (item) => {
     const response = await fetch(
       `https://expensetracker-react-ff227-default-rtdb.firebaseio.com/expense/${item.id}.json`
-     
+
     );
     const data = await response.json();
     props.onEdit(item);

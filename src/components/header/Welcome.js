@@ -4,10 +4,14 @@ import { NavLink ,useHistory} from "react-router-dom";
 import { Fragment } from "react";
 import AddExpenses from "./AddExpenses";
 //import ExpensesList from "./ExpensesList";
+import { useDispatch,useSelector } from "react-redux";
+import { authActions } from "../store/Authentication";
 
 
 function Welcome() {
   const history = useHistory();
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.authentication.token);
 
   const storedName = localStorage.getItem("enteredName");
   const storedImageUrl = localStorage.getItem("imageUrl");
@@ -20,6 +24,7 @@ function Welcome() {
     localStorage.removeItem('token');
     localStorage.removeItem('enteredName');
     localStorage.removeItem('imageUrl');
+    dispatch(authActions.logout());
     history.replace('/signup');
   };
   

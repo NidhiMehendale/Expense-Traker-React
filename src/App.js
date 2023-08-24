@@ -4,8 +4,13 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom"; // Im
 import Welcome from "./components/header/Welcome";
 import Profile from "./components/header/Profile";
 import Resetpassword from "./components/header/Resetpassword";
+import { useSelector } from "react-redux";
 
 function App() {
+  const isLoggedIn = useSelector(
+    (state) => state.authentication.isAuthenticated
+  );
+
   return (
     <React.Fragment>
       <Router> 
@@ -16,12 +21,16 @@ function App() {
           <Route path="/signup">
             <SignUp />
           </Route>
+        {isLoggedIn && (
           <Route path="/welcome" exact>
             <Welcome />
           </Route>
+        )}  
+         {isLoggedIn && (
           <Route path="/welcome/profile">
-            <Profile />
-          </Route>
+          <Profile />
+        </Route>
+         )} 
           <Route path="/resetpassword">
             <Resetpassword />
           </Route>

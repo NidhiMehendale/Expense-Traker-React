@@ -1,16 +1,17 @@
 import React, { useRef } from "react";
 import classes from './Profile.module.css';
-import AuthContext from "../store/auth-context";
-import { useContext } from "react";
+//import AuthContext from "../store/auth-context";
+//import { useContext } from "react";
 import { useHistory } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 function Profile() {
   const history = useHistory();
   const inputNameRef = useRef();
   const imageInputRef = useRef();
-  const ctx = useContext(AuthContext);
-  console.log('ctx.idtoken',ctx.idtoken);
-
+  //const ctx = useContext(AuthContext);
+ // console.log('ctx.idtoken',ctx.idtoken);
+ const token = useSelector((state) => state.authentication.token);
 
   const submitHandler = async (event) => {
     event.preventDefault();
@@ -31,7 +32,7 @@ function Profile() {
         {
           method: "POST",
           body: JSON.stringify({
-            idToken: ctx.idtoken,
+            idToken: token,
             displayName: enteredName,
             photoUrl: imageUrl,
             returnSecureToken: true,
@@ -45,9 +46,9 @@ function Profile() {
       const data = await response.json(); // Parse the response body once
     
       if (response.ok) {
-        ctx.login(data.idToken);
+       // ctx.login(data.idToken);
         history.replace('/welcome');
-        console.log('then', data);
+     
       } else {
         let errorMessage = "Authentication failed";
         if (data && data.error && data.error.message) {
