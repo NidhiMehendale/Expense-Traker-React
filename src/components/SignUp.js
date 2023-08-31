@@ -13,13 +13,10 @@ const LoginPage = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
 
   //const authCtx = useContext(AuthContext);
-
-
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -46,7 +43,6 @@ const LoginPage = () => {
     }else{
       url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAjnoOONhbal4-8ybz17138o-5U25hPyxM'
       replace="signup";
-      
     }
 
     fetch(url,
@@ -55,7 +51,6 @@ const LoginPage = () => {
             body: JSON.stringify({
               email: enteredEmail,
               password: enteredPassword,
-            
               returnSecureToken :true
             }),
             headers: {
@@ -98,11 +93,11 @@ const LoginPage = () => {
       <h1>{isLogin ? 'Login' : 'Sign Up'}</h1>
       <form onSubmit={submitHandler}>
         <div className={classes.control}>
-          <label htmlFor='email'>Email</label>
+          <label className={classes.signUplabel} htmlFor='email'>Email</label>
           <input type='email' id='email' required ref={emailInputRef} />
         </div>
         <div className={classes.control}>
-          <label htmlFor='password'>Password</label>
+          <label className={classes.signUplabel} htmlFor='password'>Password</label>
           <input
             type='password'
             id='password'
@@ -110,15 +105,14 @@ const LoginPage = () => {
             ref={passwordInputRef}
           />
         </div>
-        {!isLoading && 
           <button 
             type='button'
-            style={{color:'white',background:'inherit'}}
+            className={classes.forgotpass}
             onClick={resetpasswordHandler}
           >
           {isLogin ? 'Forgot password?' : ''}
           </button> 
-        }
+        
         <div className={classes.actions}>
        
          {!isLoading && <button>{isLogin ? 'Login' : 'Create Account'}</button> }

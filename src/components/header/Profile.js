@@ -81,12 +81,12 @@ function Profile() {
           Contact Details <button className={classes.cancel}>Cancel</button>
         </h3>
         <form onSubmit={submitHandler}>
-          <label htmlFor="name"> Full Name</label>
+          <label className={classes.profilelabel} htmlFor="name"> Full Name</label>
           <input type="text" id="name" required ref={inputNameRef} />
-          <label htmlFor="profile">Profile Photo URL</label>
+          <label className={classes.profilelabel} htmlFor="profile">Profile Photo URL</label>
           <input type="url" id="url" required ref={imageInputRef} /> <br />
           <br />
-          <button type="submit">Update</button>
+          <button className={classes.profilebutton} type="submit">Update</button>
         </form>
       </div>
     </section>

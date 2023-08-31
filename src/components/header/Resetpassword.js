@@ -38,7 +38,7 @@ function Resetpassword() {
   return (
     <div className={classes.reset}>
       <form action="" onSubmit={submitHandler} className={classes.form}>
-        <h1>Reset Password</h1>
+        <h2>Reset Password</h2>
         <label htmlFor="">Enter the Email Which You Have Registered:</label>
         <input type="text" ref={inputEmailRef} id="email" required />
         <button className={classes['reset-button']} type="submit">Send Link</button>

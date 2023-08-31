@@ -14,11 +14,12 @@ span {
     margin-top: 1rem;
     background-color: rgb(249, 243, 235);
 }
-label {
+.profilelabel {
     padding: 10px;
     margin-top: 200px;
-}
-button {
+} 
+
+.profilebutton {
     padding: 6px 12px ;
     color: antiquewhite;
     background-color: rgba(255, 127, 80, 0.132);
@@ -34,7 +35,7 @@ button {
     margin-left: 80%;
    
 }
-input {
+.control1 input {
     padding: 5px 10px;
     font-size: 10px;
-}
+} 
